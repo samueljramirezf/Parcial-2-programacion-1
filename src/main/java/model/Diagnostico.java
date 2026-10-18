@@ -6,8 +6,9 @@ public class Diagnostico extends Servicio {
         super(ownedByEmpresa, codigo, nombre, descripcion, tarifaBase);
     }
 
+    // el diagnostico tiene un costo fijo
     @Override
-    public double calcularCosto() {
+    public double calcularCosto(DetalleOrdenServicio detalle) {
         return getTarifaBase();
     }
 }

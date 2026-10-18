@@ -6,7 +6,7 @@ public class Tecnico {
     private String ID;
     private boolean estado;
     private Especialidad especialidad;
-    Empresa ownedByEmpresa;
+    private Empresa ownedByEmpresa;
 
     public Tecnico(String codigo, String ID, Especialidad especialidad, Empresa ownedByEmpresa, boolean estado, String nombre) {
         this.codigo = codigo;
@@ -25,9 +25,10 @@ public class Tecnico {
             case SOPORTE_GENERAL:
                 return true;
             case COMPUTADORES:
-                return equipo instanceof PCPortatil || equipo instanceof PCEscritorio;
+                return equipo.getCategoria() == CategoriaCompatibilidad.PC_PORTATIL
+                        || equipo.getCategoria() == CategoriaCompatibilidad.PC_ESCRITORIO;
             case DISPOSITIVOS_MOVILES:
-                return equipo instanceof CelularInteligente;
+                return equipo.getCategoria() == CategoriaCompatibilidad.CELULAR_INTELIGENTE;
             default:
                 return false;
         }

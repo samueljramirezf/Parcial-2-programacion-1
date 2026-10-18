@@ -25,6 +25,11 @@ public class CelularInteligente extends EquipoTec {
         return CategoriaCompatibilidad.CELULAR_INTELIGENTE;
     }
 
+    @Override
+    public boolean datosValidos() {
+        return super.datosValidos() && !estaVacio(sistemaOperativo) && almacenamiento > 0 && capacidadBateria > 0;
+    }
+
     public String getSistemaOperativo() {
         return sistemaOperativo;
     }

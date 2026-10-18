@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Cliente {
-private String ID;
-private String nombreCompleto;
-private String telefono;
-private String correo;
-private  String direccion;
-Empresa ownedByEmpresa;
-ArrayList<EquipoTec> listaEquipos= new ArrayList<>();
-ArrayList<OrdenServicio> listaOrdenesDeServicio= new ArrayList<>();
+    private String ID;
+    private String nombreCompleto;
+    private String telefono;
+    private String correo;
+    private String direccion;
+    private Empresa ownedByEmpresa;
+    private ArrayList<EquipoTec> listaEquipos = new ArrayList<>();
 
     public Cliente(Empresa ownedByEmpresa, String direccion, String correo, String telefono, String nombreCompleto, String ID) {
         this.ownedByEmpresa = ownedByEmpresa;
@@ -26,8 +25,8 @@ ArrayList<OrdenServicio> listaOrdenesDeServicio= new ArrayList<>();
         Optional<EquipoTec> equipoYaExiste = buscarEquipo(equipo.getCodigoRegistro());
         if (equipoYaExiste.isEmpty()) {
             listaEquipos.add(equipo);
-            return "El equipo fue registrado de forma exitosa";
-        } else return "El equipo no pudo ser registrado debido a que ya existe en TechRepair ";
+            return "equipo registrado";
+        } else return "ese equipo ya esta registrado";
     }
 
     public Optional<EquipoTec> buscarEquipo(String codigoRegistro) {
@@ -37,10 +36,6 @@ ArrayList<OrdenServicio> listaOrdenesDeServicio= new ArrayList<>();
             }
         }
         return Optional.empty();
-    }
-
-    public ArrayList<EquipoTec> getListaEquipos() {
-        return listaEquipos;
     }
 
     public String getID() {
@@ -81,5 +76,13 @@ ArrayList<OrdenServicio> listaOrdenesDeServicio= new ArrayList<>();
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public Empresa getOwnedByEmpresa() {
+        return ownedByEmpresa;
+    }
+
+    public ArrayList<EquipoTec> getListaEquipos() {
+        return listaEquipos;
     }
 }

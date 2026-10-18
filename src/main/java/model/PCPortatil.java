@@ -17,13 +17,17 @@ public class PCPortatil extends EquipoTec {
 
     @Override
     public double getTarifaMantenimiento() {
-        return 50000;
+        return 60000;
     }
 
     @Override
     public CategoriaCompatibilidad getCategoria() {
-
         return CategoriaCompatibilidad.PC_PORTATIL;
+    }
+
+    @Override
+    public boolean datosValidos() {
+        return super.datosValidos() && tamañoPantalla > 0 && memoriaRam > 0 && almacenamiento > 0;
     }
 
     public float getTamañoPantalla() {

@@ -3,8 +3,8 @@ package model;
 public class RepuestoUtilizado {
     private int cantidad;
     private double precioUnitario;
-    Repuesto repuesto;
-    DetalleOrdenServicio ownedByDetalle;
+    private Repuesto repuesto;
+    private DetalleOrdenServicio ownedByDetalle;
 
     public RepuestoUtilizado(DetalleOrdenServicio ownedByDetalle, Repuesto repuesto, int cantidad) {
         this.ownedByDetalle = ownedByDetalle;

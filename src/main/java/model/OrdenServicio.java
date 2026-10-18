@@ -2,15 +2,16 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class OrdenServicio {
-  protected String codigo;
-  protected LocalDate fecha;
-  protected String observaciones;
-  protected EstadoDeOrden estadoDeOrden;
-  Cliente cliente;
-  Empresa ownedByEmpresa;
-  ArrayList<DetalleOrdenServicio> detalles = new ArrayList<>();
+  private String codigo;
+  private LocalDate fecha;
+  private String observaciones;
+  private EstadoDeOrden estadoDeOrden;
+  private Cliente cliente;
+  private Empresa ownedByEmpresa;
+  private ArrayList<DetalleOrdenServicio> detalles = new ArrayList<>();
 
   public OrdenServicio(Empresa ownedByEmpresa, Cliente cliente, String codigo, LocalDate fecha, String observaciones) {
     this.ownedByEmpresa = ownedByEmpresa;
@@ -21,13 +22,28 @@ public class OrdenServicio {
     this.estadoDeOrden = EstadoDeOrden.ABIERTA;
   }
 
-  public boolean agregarDetalle(DetalleOrdenServicio detalle) {
-    if (estadoDeOrden == EstadoDeOrden.ABIERTA || estadoDeOrden == EstadoDeOrden.EN_PROCESO) {
-      detalles.add(detalle);
-      estadoDeOrden = EstadoDeOrden.EN_PROCESO;
-      return true;
+  public String agregarDetalle(DetalleOrdenServicio detalle) {
+    if (estadoDeOrden != EstadoDeOrden.ABIERTA && estadoDeOrden != EstadoDeOrden.EN_PROCESO) {
+      return "la orden tiene que estar abierta o en proceso";
     }
-    return false;
+    if (buscarDetalle(detalle.getCodigo()).isPresent()) {
+      return "ya hay un detalle con ese codigo en la orden";
+    }
+    if (detalle.getEquipo().getOwnedByCliente() != cliente) {
+      return "ese equipo no es del cliente de la orden";
+    }
+    detalles.add(detalle);
+    estadoDeOrden = EstadoDeOrden.EN_PROCESO;
+    return "detalle agregado";
+  }
+
+  public Optional<DetalleOrdenServicio> buscarDetalle(String codigoDetalle) {
+    for (DetalleOrdenServicio detalle : detalles) {
+      if (detalle.getCodigo().equals(codigoDetalle)) {
+        return Optional.of(detalle);
+      }
+    }
+    return Optional.empty();
   }
 
   public double calcularValorTotal() {
@@ -38,13 +54,34 @@ public class OrdenServicio {
     return total;
   }
 
-  public boolean finalizar() {
+  public String finalizar() {
     // segun el diagrama una orden debe tener al menos un detalle (1..*)
-    if (estadoDeOrden == EstadoDeOrden.EN_PROCESO && !detalles.isEmpty()) {
-      estadoDeOrden = EstadoDeOrden.FINALIZADA;
-      return true;
+    if (estadoDeOrden != EstadoDeOrden.EN_PROCESO || detalles.isEmpty()) {
+      return "la orden tiene que estar en proceso y tener detalles";
     }
-    return false;
+    for (DetalleOrdenServicio d : detalles) {
+      if (d.getEstado() != EstadoIntervencion.FINALIZADO) {
+        return "no se puede finalizar, el detalle " + d.getCodigo() + " no esta finalizado";
+      }
+    }
+    estadoDeOrden = EstadoDeOrden.FINALIZADA;
+    return "orden finalizada";
+  }
+
+  public String entregar() {
+    if (estadoDeOrden != EstadoDeOrden.FINALIZADA) {
+      return "la orden tiene que estar finalizada para entregarla";
+    }
+    estadoDeOrden = EstadoDeOrden.ENTREGADA;
+    return "orden entregada";
+  }
+
+  public String cancelar() {
+    if (estadoDeOrden != EstadoDeOrden.ABIERTA && estadoDeOrden != EstadoDeOrden.EN_PROCESO) {
+      return "solo se puede cancelar si esta abierta o en proceso";
+    }
+    estadoDeOrden = EstadoDeOrden.CANCELADA;
+    return "orden cancelada";
   }
 
   public String getCodigo() {
@@ -67,12 +104,12 @@ public class OrdenServicio {
     return estadoDeOrden;
   }
 
-  public void setEstadoDeOrden(EstadoDeOrden estadoDeOrden) {
-    this.estadoDeOrden = estadoDeOrden;
-  }
-
   public Cliente getCliente() {
     return cliente;
+  }
+
+  public Empresa getOwnedByEmpresa() {
+    return ownedByEmpresa;
   }
 
   public ArrayList<DetalleOrdenServicio> getDetalles() {

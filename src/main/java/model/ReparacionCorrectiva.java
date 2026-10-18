@@ -6,8 +6,10 @@ public class ReparacionCorrectiva extends Servicio {
         super(ownedByEmpresa, codigo, nombre, descripcion, tarifaBase);
     }
 
+    // mano de obra por hora mas el valor de los repuestos utilizados
     @Override
-    public double calcularCosto() {
-        return getTarifaBase() * 1.5;
+    public double calcularCosto(DetalleOrdenServicio detalle) {
+        double manoDeObra = getTarifaBase() * detalle.getHorasTrabajo();
+        return manoDeObra + detalle.calcularCostoRepuestos();
     }
 }

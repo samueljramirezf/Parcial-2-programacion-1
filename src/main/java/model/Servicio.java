@@ -5,7 +5,7 @@ public abstract class Servicio {
     private String nombre;
     private String descripcion;
     private double tarifaBase;
-    Empresa ownedByEmpresa;
+    private Empresa ownedByEmpresa;
 
     public Servicio(Empresa ownedByEmpresa, String codigo, String nombre, String descripcion, double tarifaBase) {
         this.ownedByEmpresa = ownedByEmpresa;
@@ -15,7 +15,8 @@ public abstract class Servicio {
         this.tarifaBase = tarifaBase;
     }
 
-    public abstract double calcularCosto();
+    // cada tipo de servicio calcula su costo con los datos del detalle (equipo, horas y repuestos)
+    public abstract double calcularCosto(DetalleOrdenServicio detalle);
 
     public String getCodigo() {
         return codigo;

@@ -17,12 +17,17 @@ public class PCEscritorio extends EquipoTec {
 
     @Override
     public double getTarifaMantenimiento() {
-        return 60000;
+        return 70000;
     }
 
     @Override
     public CategoriaCompatibilidad getCategoria() {
         return CategoriaCompatibilidad.PC_ESCRITORIO;
+    }
+
+    @Override
+    public boolean datosValidos() {
+        return super.datosValidos() && !estaVacio(tipoProcesador) && memoriaRam > 0 && almacenamiento > 0;
     }
 
     public String getTipoProcesador() {

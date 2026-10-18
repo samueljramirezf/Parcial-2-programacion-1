@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 public abstract class EquipoTec {
     private String codigoRegistro;
     private String numeroSerie;
@@ -7,7 +9,7 @@ public abstract class EquipoTec {
     private String modelo;
     private int añoFabricacion;
     private String estadoFisico;
-    Cliente ownedByCliente;
+    private Cliente ownedByCliente;
 
     public EquipoTec(Cliente ownedByCliente, String codigoRegistro, String numeroSerie, String marca, String modelo, int anioFabricacion, String estadoFisico) {
         this.ownedByCliente = ownedByCliente;
@@ -22,6 +24,19 @@ public abstract class EquipoTec {
     public abstract double getTarifaMantenimiento();
 
     public abstract CategoriaCompatibilidad getCategoria();
+
+    // valida los datos comunes; cada hija agrega los de su categoria
+    public boolean datosValidos() {
+        int anioActual = LocalDate.now().getYear();
+        if (estaVacio(codigoRegistro) || estaVacio(numeroSerie) || estaVacio(marca) || estaVacio(modelo) || estaVacio(estadoFisico)) {
+            return false;
+        }
+        return añoFabricacion >= 1990 && añoFabricacion <= anioActual;
+    }
+
+    protected boolean estaVacio(String texto) {
+        return texto == null || texto.isBlank();
+    }
 
     public String getCodigoRegistro() {
         return codigoRegistro;

@@ -5,14 +5,14 @@ public class Repuesto {
     private final String nombre;
     private final String descripcion;
     private final double precioUnitario;
-    private short cantidaDisponible;
+    private int cantidadDisponible;
     private final CategoriaCompatibilidad categoriaCompatibilidad;
-    Empresa ownedByEmpresa;
+    private Empresa ownedByEmpresa;
 
-    public Repuesto(Empresa ownedByEmpresa, CategoriaCompatibilidad categoriaCompatibilidad, short cantidaDisponible, String descripcion, String codigo, String nombre, double precioUnitario) {
+    public Repuesto(Empresa ownedByEmpresa, CategoriaCompatibilidad categoriaCompatibilidad, int cantidadDisponible, String descripcion, String codigo, String nombre, double precioUnitario) {
         this.ownedByEmpresa = ownedByEmpresa;
         this.categoriaCompatibilidad = categoriaCompatibilidad;
-        this.cantidaDisponible = cantidaDisponible;
+        this.cantidadDisponible = cantidadDisponible;
         this.descripcion = descripcion;
         this.codigo = codigo;
         this.nombre = nombre;
@@ -20,31 +20,24 @@ public class Repuesto {
     }
 
     public boolean hayDisponibilidad(int cantidad) {
-        return cantidad > 0 && cantidaDisponible >= cantidad;
+        return cantidad > 0 && cantidadDisponible >= cantidad;
     }
 
     public boolean descontar(int cantidad) {
         if (!hayDisponibilidad(cantidad)) {
             return false;
         }
-        cantidaDisponible -= cantidad;
+        cantidadDisponible -= cantidad;
         return true;
     }
 
+    // el contexto dice existencias inferiores a cinco unidades
     public boolean esCritico() {
-        return cantidaDisponible <= 5;
+        return cantidadDisponible < 5;
     }
 
     public String getCodigo() {
         return codigo;
-    }
-
-    public CategoriaCompatibilidad getCategoriaCompatibilidad() {
-        return categoriaCompatibilidad;
-    }
-
-    public short getCantidaDisponible() {
-        return cantidaDisponible;
     }
 
     public String getNombre() {
@@ -57,5 +50,17 @@ public class Repuesto {
 
     public double getPrecioUnitario() {
         return precioUnitario;
+    }
+
+    public int getCantidadDisponible() {
+        return cantidadDisponible;
+    }
+
+    public CategoriaCompatibilidad getCategoriaCompatibilidad() {
+        return categoriaCompatibilidad;
+    }
+
+    public Empresa getOwnedByEmpresa() {
+        return ownedByEmpresa;
     }
 }
